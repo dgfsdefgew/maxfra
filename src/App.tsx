@@ -119,13 +119,15 @@ const MAXFRADirectorMVP = () => {
     satisfactionRate: 89
   };
 
-  const receiptCatalog = [
+  const defaultReceiptCatalog = [
     { id: 1, name: 'Microblading Course', price: 2500, category: 'Courses' },
     { id: 2, name: 'Eyelash Extensions Course', price: 2200, category: 'Courses' },
     { id: 3, name: 'Registration Fee', price: 500, category: 'Fees' },
     { id: 4, name: 'Materials Kit', price: 450, category: 'Materials' },
     { id: 5, name: 'Certificate Fee', price: 200, category: 'Fees' }
   ];
+
+  const [catalogItems, setCatalogItems] = useState(defaultReceiptCatalog);
 
   // Available time slots
   const getAvailableTimeSlots = (dayOfWeek) => {
@@ -360,6 +362,12 @@ const MAXFRADirectorMVP = () => {
   };
 
   const isLocationOpen = (dayOfWeek) => dayOfWeek >= 1 && dayOfWeek <= 6;
+
+  const updateCatalogItemPrice = (id, price) => {
+    setCatalogItems(catalogItems.map(item =>
+      item.id === id ? { ...item, price: parseFloat(price) || 0 } : item
+    ));
+  };
 
   const addReceiptItem = (item) => {
     const newItem = {
@@ -1999,7 +2007,7 @@ const MAXFRADirectorMVP = () => {
           <div className="mb-6">
             <h4 className="text-md font-semibold text-gray-800 mb-3">🚀 Quick Add Common Items:</h4>
             <div className="grid grid-cols-1 gap-3">
-              {receiptCatalog.map((item) => (
+              {catalogItems.map((item) => (
                 <div key={item.id} className="bg-white rounded-lg p-4 border border-gray-200 shadow-sm">
                   <div className="flex justify-between items-center">
                     <div className="flex-1">
@@ -2009,11 +2017,8 @@ const MAXFRADirectorMVP = () => {
                         <span className="text-sm text-gray-600">Price: $</span>
                         <input
                           type="number"
-                          defaultValue={item.price}
-                          onChange={(e) => {
-                            const updatedItem = {...item, price: parseFloat(e.target.value) || 0};
-                            // Update the item price temporarily
-                          }}
+                          value={item.price}
+                          onChange={(e) => updateCatalogItemPrice(item.id, e.target.value)}
                           className="w-20 p-1 text-sm border border-gray-200 rounded focus:border-blue-300"
                           min="0"
                           step="0.01"
