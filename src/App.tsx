@@ -1584,10 +1584,11 @@ const MAXFRADirectorMVP = () => {
     
     const convertTo24h = (time12h) => {
       const [time, modifier] = time12h.split(' ');
-      let [hours, minutes] = time.split(':');
-      if (hours === '12') hours = '00';
-      if (modifier === 'PM') hours = parseInt(hours, 10) + 12;
-      return `${hours.padStart(2, '0')}:${minutes}`;
+      const [h, minutes] = time.split(':');
+      let hourNum = parseInt(h, 10);
+      if (hourNum === 12) hourNum = 0;
+      if (modifier === 'PM') hourNum += 12;
+      return `${hourNum.toString().padStart(2, '0')}:${minutes}`;
     };
     
     const timeStartMX = convertTo24h(timeStart);
